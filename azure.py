@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class AzureAPI(object):
@@ -6,6 +7,10 @@ class AzureAPI(object):
 
     def __init__(self, config):
         self._subscription_key = config['SUBSCRIPTION_KEY']
+        self._headers = {
+            'Content-Type': 'application/json',
+            'Ocp-Apim-Subscription-Key': self._subscription_key
+        }
 
     def detect_language(self):
         raise NotImplementedError()
@@ -17,4 +22,9 @@ class AzureAPI(object):
         raise NotImplementedError()
 
     def sentiment(self, data):
-        return requests.post(self._API_URI + 'sentiment', data)
+        return self._post('sentiment', data)
+
+    def _post(self, service, data):
+        uri = self._API_URI + service
+        response = requests.post(uri, data, headers=self._headers)
+        return json.loads(response.text)
