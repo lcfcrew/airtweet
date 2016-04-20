@@ -21,7 +21,8 @@ class AirTweet(object):
         self._azure_api = azure.AzureAPI(
             azure_config['SUBSCRIPTION_KEY'])
 
-    def analyze(self, query, max_items=1000):
+    def analyze(self, query, max_items=1000, do_language_detection=True,
+                do_sentiment_analysis=True, do_key_phrase_detection=True):
         # Get tweets from Twitter
         tweets = self._twitter_api.search(query, max_items)
 
@@ -29,25 +30,25 @@ class AirTweet(object):
         docs = [{'id': k, 'text': v['text']} for k, v in tweets.items()]
         data = {'documents': docs}
 
-        # Languages
-        languages = self._azure_api.detect_language(data)
-        for tweet in languages['documents']:
-            language = tweet['detectedLanguages'][0]
-            language = {
-                'name': language['name'],
-                'iso_6391': language['iso6391Name'],
-                'score': language['score']
-            }
-            tweets[tweet['id']]['language'] = language
+        if do_language_detection:
+            languages = self._azure_api.detect_language(data)
+            for tweet in languages['documents']:
+                language = tweet['detectedLanguages'][0]
+                language = {
+                    'name': language['name'],
+                    'iso_6391': language['iso6391Name'],
+                    'score': language['score']
+                }
+                tweets[tweet['id']]['language'] = language
 
-        # Sentiment
-        sentiment = self._azure_api.sentiment(data)
-        for tweet in sentiment['documents']:
-            tweets[tweet['id']]['sentiment'] = tweet['score']
+        if do_sentiment_analysis:
+            sentiment = self._azure_api.sentiment(data)
+            for tweet in sentiment['documents']:
+                tweets[tweet['id']]['sentiment'] = tweet['score']
 
-        # Key Phrases
-        key_phrases = self._azure_api.key_phrases(data)
-        for tweet in key_phrases['documents']:
-            tweets[tweet['id']]['key_phrases'] = tweet['keyPhrases']
+        if do_key_phrase_detection:
+            key_phrases = self._azure_api.key_phrases(data)
+            for tweet in key_phrases['documents']:
+                tweets[tweet['id']]['key_phrases'] = tweet['keyPhrases']
 
         return tweets
