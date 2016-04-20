@@ -6,6 +6,14 @@ import azure
 
 
 class AirTweet(object):
+    """
+    An interface to analyze Twitter search results using the Azure Cognitive
+    Services Text Analysis API.
+
+    **NOTE:** Requires an `airtweet.ini` file with Twitter API tokens and
+    an Azure subscription key.
+    """
+
     def __init__(self, config_path='airtweet.ini'):
         config = configparser.ConfigParser()
         config.read(config_path)
@@ -23,6 +31,17 @@ class AirTweet(object):
 
     def analyze(self, query, max_items=1000, do_language_detection=True,
                 do_sentiment_analysis=True, do_key_phrase_detection=True):
+        """
+        Analyzes Twitter search results using Azure Cognitive Services Text
+        Analysis APIs.
+
+        :param query: A string query
+        :param max_items: The maximum number of tweets to fetch
+        :param do_language_detection: Perform language detection
+        :param do_sentiment_analysis: Perform sentiment analysis
+        :param do_key_phrase_detection: Perform key phrase detection
+        :return: A dictionary of analyzed tweets
+        """
         # Get tweets from Twitter
         tweets = self._twitter_api.search(query, max_items)
 
