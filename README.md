@@ -20,7 +20,7 @@ to its `analyze()` method:
 ```python
 import airtweet
 client = airtweet.AirTweet()
-client.analyze('#merica', 3)
+client.analyze('#merica', 4)
 
 # {'722851321666265089': {'key_phrases': ['pants',
 #                                         'merica',
