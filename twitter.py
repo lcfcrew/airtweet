@@ -15,4 +15,10 @@ class TwitterAPI(object):
 
     def search(self, query, max_items=1000):
         cursor = tweepy.Cursor(self._api.search, q=query).items(max_items)
-        return cursor
+        tweets = {}
+        for tweet in cursor:
+            tweets[tweet.id] = {
+                'id': tweet.id,
+                'text': tweet.text
+            }
+        return tweets
