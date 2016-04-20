@@ -25,5 +25,5 @@ class AzureAPI(object):
 
     def _post(self, service, data):
         uri = self._API_URI + service
-        response = requests.post(uri, data, headers=self._headers)
+        response = requests.post(uri, json=data, headers=self._headers)
         return json.loads(response.text)
