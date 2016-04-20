@@ -1,6 +1,9 @@
 import configparser
+import json
 
-from . import twitter, azure
+import twitter
+import azure
+
 
 _DEFAULT_CONFIG_PATH = 'airtweet.ini'
 
@@ -18,3 +21,22 @@ class AirTweet(object):
 
         self._twitter_api = twitter.TwitterAPI(config['TwitterAPI'])
         self._azure_api = azure.AzureAPI(config['AzureAPI'])
+
+    def analyze(self, query, max_items=1000):
+        # Get tweets from Twitter
+        tweets = self._twitter_api.search(query, max_items)
+
+        # Compile tweets into Azure-formatted data
+        data = {'documents': []}
+        for key, value in tweets.items():
+            data['documents'].append({
+                'id': key,
+                'text': value['text']
+            })
+
+        # Detect sentiment
+        sentiment = self._azure_api.sentiment(data)
+        for tweet in sentiment['documents']:
+            tweets[tweet['id']]['sentiment'] = tweet['score']
+
+        return tweets
