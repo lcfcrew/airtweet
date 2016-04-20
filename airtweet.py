@@ -19,8 +19,16 @@ class AirTweet(object):
         config_path = config_path or _DEFAULT_CONFIG_PATH
         config = _read_config_file(config_path)
 
-        self._twitter_api = twitter.TwitterAPI(config['TwitterAPI'])
-        self._azure_api = azure.AzureAPI(config['AzureAPI'])
+        # Twitter API
+        twitter_config = config['TwitterAPI']
+        self._twitter_api = twitter.TwitterAPI(
+            twitter_config['CONSUMER_TOKEN'], twitter_config['CONSUMER_SECRET'],
+            twitter_config['ACCESS_TOKEN'], twitter_config['ACCESS_SECRET'])
+
+        # Azure API
+        azure_config = config['AzureAPI']
+        self._azure_api = azure.AzureAPI(
+            azure_config['SUBSCRIPTION_KEY'])
 
     def analyze(self, query, max_items=1000):
         # Get tweets from Twitter

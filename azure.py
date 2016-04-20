@@ -5,11 +5,10 @@ import json
 class AzureAPI(object):
     _API_URI = 'https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/'
 
-    def __init__(self, config):
-        self._subscription_key = config['SUBSCRIPTION_KEY']
+    def __init__(self, subscription_key):
         self._headers = {
             'Content-Type': 'application/json',
-            'Ocp-Apim-Subscription-Key': self._subscription_key
+            'Ocp-Apim-Subscription-Key': subscription_key
         }
 
     def detect_language(self):

@@ -2,15 +2,10 @@ import tweepy
 
 
 class TwitterAPI(object):
-    def __init__(self, config):
-        auth = tweepy.OAuthHandler(
-            config['CONSUMER_TOKEN'],
-            config['CONSUMER_SECRET']
-        )
-        auth.set_access_token(
-            config['ACCESS_TOKEN'],
-            config['ACCESS_SECRET']
-        )
+    def __init__(self, consumer_token, consumer_secret, access_token,
+                 access_secret):
+        auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
+        auth.set_access_token(access_token, access_secret)
         self._api = tweepy.API(auth)
 
     def search(self, query, max_items=1000):
