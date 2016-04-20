@@ -35,12 +35,8 @@ class AirTweet(object):
         tweets = self._twitter_api.search(query, max_items)
 
         # Compile tweets into Azure-formatted data
-        data = {'documents': []}
-        for key, value in tweets.items():
-            data['documents'].append({
-                'id': key,
-                'text': value['text']
-            })
+        docs = [{'id': k, 'text': v['text']} for k, v in tweets.items()]
+        data = {'documents': docs}
 
         # Detect sentiment
         sentiment = self._azure_api.sentiment(data)
