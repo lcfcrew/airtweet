@@ -11,8 +11,8 @@ class AzureAPI(object):
             'Ocp-Apim-Subscription-Key': subscription_key
         }
 
-    def detect_language(self):
-        raise NotImplementedError()
+    def detect_language(self, data):
+        return self._post('languages', data)
 
     def detect_topics(self):
         raise NotImplementedError()

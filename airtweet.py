@@ -37,8 +37,17 @@ class AirTweet(object):
         # Compile tweets into Azure-formatted data
         docs = [{'id': k, 'text': v['text']} for k, v in tweets.items()]
         data = {'documents': docs}
-        import pprint
-        pprint.pprint(data)
+
+        # Languages
+        languages = self._azure_api.detect_language(data)
+        for tweet in languages['documents']:
+            language = tweet['detectedLanguages'][0]
+            language = {
+                'name': language['name'],
+                'iso_6391': language['iso6391Name'],
+                'score': language['score']
+            }
+            tweets[tweet['id']]['language'] = language
 
         # Sentiment
         sentiment = self._azure_api.sentiment(data)
