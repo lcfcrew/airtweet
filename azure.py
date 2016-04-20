@@ -17,8 +17,8 @@ class AzureAPI(object):
     def detect_topics(self):
         raise NotImplementedError()
 
-    def key_phrases(self):
-        raise NotImplementedError()
+    def key_phrases(self, data):
+        return self._post('keyPhrases', data)
 
     def sentiment(self, data):
         return self._post('sentiment', data)
