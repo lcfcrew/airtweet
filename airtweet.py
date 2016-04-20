@@ -1,6 +1,6 @@
 import configparser
 
-from . import twitter
+from . import twitter, azure
 
 _DEFAULT_CONFIG_PATH = 'airtweet.ini'
 
@@ -17,3 +17,4 @@ class AirTweet(object):
         config = _read_config_file(config_path)
 
         self._twitter_api = twitter.TwitterAPI(config['TwitterAPI'])
+        self._azure_api = azure.AzureAPI(config['AzureAPI'])
